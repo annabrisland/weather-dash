@@ -10,20 +10,23 @@ function searchSave(location) {}
 
 // Render results on page
 function renderResults(results) {
-  console.log(results);
-  var icon = results.list[0].weather[0].icon;
-  var iconURL = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
-  var date = dayjs(results.list[0].dt_txt).format("dddd, D MMMM");
-  var temp = results.list[0].main.temp;
-  var wind = results.list[0].wind.speed;
-  var humidity = results.list[0].main.humidity;
-  
-  var weatherIcon = $("<img>").attr("src", iconURL);
-  var forecastDate = $("<div>").text(date);
-  var forecastTemp = $("<div>").text(temp + "℃");
-  var forecastWind = $("<div>").text("Wind Speed: " + wind + "kmph");
-  var forecastHumidity = $("<div>").text("Humidity: " + humidity + "%");
-  forecast.append(weatherIcon, forecastDate, forecastTemp, forecastWind, forecastHumidity);
+    // Loop through results
+    for(var i = 5; i < 40; i += 8) {
+        var icon = results.list[i].weather[0].icon;
+        var iconURL = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
+        var date = dayjs(results.list[i].dt_txt).format("dddd, D MMMM");
+        var temp = results.list[i].main.temp;
+        var wind = results.list[i].wind.speed;
+        var humidity = results.list[i].main.humidity;
+        
+        var weatherIcon = $("<img>").attr("src", iconURL);
+        var forecastDate = $("<div>").text(date);
+        var forecastTemp = $("<div>").text(temp + "℃");
+        var forecastWind = $("<div>").text("Wind Speed: " + wind + "kmph");
+        var forecastHumidity = $("<div>").text("Humidity: " + humidity + "%");
+        forecast.append(weatherIcon, forecastDate, forecastTemp, forecastWind, forecastHumidity);
+    }
+
 
 }
 
@@ -36,7 +39,7 @@ sumbit.on("click", function (event) {
   var queryURL =
     "https://api.openweathermap.org/data/2.5/forecast?q=" +
     location +
-    "&cnt=1&units=metric&appid=" +
+    "&cnt=40&units=metric&appid=" +
     APIkey;
   fetch(queryURL)
     .then(function (response) {
