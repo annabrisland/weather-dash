@@ -1,6 +1,9 @@
 var APIkey = "2e17c151d7db1d257660c3301bec1b41";
 var sumbit = $(".search-button");
 var inputLocation = $("#search-input");
+var history = $("#history");
+var today = $("#today");
+var forecast = $("#forecast");
 
 // Save search results to local storage
 function searchSave(location) {}
@@ -9,8 +12,19 @@ function searchSave(location) {}
 function renderResults(results) {
   console.log(results);
   var icon = results.list[0].weather[0].icon;
+  var iconURL = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
   var date = dayjs(results.list[0].dt_txt).format("dddd, D MMMM");
-  console.log(date);
+  var temp = results.list[0].main.temp;
+  var wind = results.list[0].wind.speed;
+  var humidity = results.list[0].main.humidity;
+  
+  var weatherIcon = $("<img>").attr("src", iconURL);
+  var forecastDate = $("<div>").text(date);
+  var forecastTemp = $("<div>").text(temp + "℃");
+  var forecastWind = $("<div>").text("Wind Speed: " + wind + "kmph");
+  var forecastHumidity = $("<div>").text("Humidity: " + humidity + "%");
+  forecast.append(weatherIcon, forecastDate, forecastTemp, forecastWind, forecastHumidity);
+
 }
 
 // Create event handler for location submission
