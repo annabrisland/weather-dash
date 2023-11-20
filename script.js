@@ -6,6 +6,7 @@ var current = $("#today");
 var forecast = $("#forecast");
 
 var searchHistory = [];
+localStorage.setItem("history", JSON.stringify(searchHistory));
 
 // Save search results to local storage
 function searchSave(location) {
@@ -35,7 +36,6 @@ function renderHistory() {
       var historyBtn = $("<button>").text(previousSearch[i]).attr("location-name", previousSearch[i]);
       locationHistory.prepend(historyBtn);
     }
-
   
 }
 
