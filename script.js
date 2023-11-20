@@ -41,12 +41,14 @@ function renderHistory() {
 
 // Render results on page
 function renderResults(today, results) {
-     // Empty content sections
-    current.empty();
-    forecast.empty();
+    
 
     // Render today's result
     if (today) {
+        // Empty content sections
+        current.empty();
+        forecast.empty();
+
         var icon = results.weather[0].icon;
         var iconURL = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
         var temp = results.main.temp;
@@ -58,7 +60,8 @@ function renderResults(today, results) {
         var todayWind = $("<div>").text("Wind Speed: " + wind + "kmph");
         var todayHumidity = $("<div>").text("Humidity: " + humidity + "%");
         current.text("Today");
-        current.append(weatherIcon, todayTemp, todayWind, todayHumidity);
+        var todayBlock = $("<div>").append(weatherIcon, todayTemp, todayWind, todayHumidity).addClass("today-block");
+        current.append(todayBlock);
 
     } else {
         // Loop through results
@@ -75,7 +78,8 @@ function renderResults(today, results) {
             var forecastTemp = $("<div>").text(temp + "℃");
             var forecastWind = $("<div>").text("Wind Speed: " + wind + "kmph");
             var forecastHumidity = $("<div>").text("Humidity: " + humidity + "%");
-            forecast.append(weatherIcon, forecastDate, forecastTemp, forecastWind, forecastHumidity);
+            var forecastBlock = $("<div>").append(weatherIcon, forecastDate, forecastTemp, forecastWind, forecastHumidity).addClass("forecast-block");
+            forecast.append(forecastBlock);
     }
     }
 
