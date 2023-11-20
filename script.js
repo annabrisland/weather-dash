@@ -26,13 +26,14 @@ function searchSave(location) {
 
 // Render search history
 function renderHistory() {
+  locationHistory.empty();
   // Get form local storage
   var previousSearch = JSON.parse(localStorage.getItem("history"));
   
   // Loop through history array
     for (var i = 0; i < previousSearch.length; i++) {
       var historyBtn = $("<button>").text(previousSearch[i]).attr("location-name", previousSearch[i]);
-      locationHistory.append(historyBtn);
+      locationHistory.prepend(historyBtn);
     }
 
   
@@ -96,6 +97,8 @@ function forecastInfo(location) {
       // Render results to page
       var today = true;
       renderResults(today, data);
+    })
+    .catch(function() {
     });
   
   // Fetch request for 5 day forecast data
@@ -112,6 +115,9 @@ function forecastInfo(location) {
       // Render results to page
       var today = false;
       renderResults(today, data);
+    })
+    .catch(function() {
+      alert("Enter a valid location. Please check your spelling");
     });
 }
 
