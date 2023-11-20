@@ -1,7 +1,7 @@
 var APIkey = "2e17c151d7db1d257660c3301bec1b41";
 var sumbit = $(".search-button");
 var inputLocation = $("#search-input");
-var history = $("#history");
+var locationHistory = $("#history");
 var current = $("#today");
 var forecast = $("#forecast");
 
@@ -9,13 +9,33 @@ var searchHistory = [];
 
 // Save search results to local storage
 function searchSave(location) {
+  
+  var previous = JSON.parse(localStorage.getItem("history"));
+
+  if (previous) {
+    searchHistory = previous
+  }
+
   // Add current search to array
   var currentSearch = location;
   searchHistory.push(currentSearch);
 
   localStorage.setItem("history", JSON.stringify(searchHistory));
-  currentSearch = "";
 
+}
+
+// Render search history
+function renderHistory() {
+  // Get form local storage
+  var previousSearch = JSON.parse(localStorage.getItem("history"));
+  
+  // Loop through history array
+    for (var i = 0; i < previousSearch.length; i++) {
+      var historyBtn = $("<button>").text(previousSearch[i]);
+      locationHistory.append(historyBtn);
+    }
+
+  
 }
 
 // Render results on page
@@ -41,7 +61,7 @@ function renderResults(today, results) {
 
     } else {
         // Loop through results
-        for(var i = 5; i < 40; i += 8) {
+        for (var i = 5; i < 40; i += 8) {
             var icon = results.list[i].weather[0].icon;
             var iconURL = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
             var date = dayjs(results.list[i].dt_txt).format("dddd, D MMMM");
@@ -64,6 +84,8 @@ function renderResults(today, results) {
 sumbit.on("click", function (event) {
   event.preventDefault();
   var location = inputLocation.val().trim();
+  // Render search history
+  renderHistory();
 
   // Save to local storage
   searchSave(location);
@@ -100,5 +122,7 @@ sumbit.on("click", function (event) {
       renderResults(today, data);
     });
 
-  // Render search history
 });
+
+// Render search history
+renderHistory();
