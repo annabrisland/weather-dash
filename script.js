@@ -51,19 +51,25 @@ function renderResults(today, results) {
 
         var icon = results.weather[0].icon;
         var iconURL = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
+
+        var place = results.name;
         var temp = results.main.temp;
         var wind = results.wind.speed;
         var humidity = results.main.humidity;
-
+        
+        var placeName = $("<div>").text(place).addClass("location-name");
         var weatherIcon = $("<img>").attr("src", iconURL);
-        var todayTemp = $("<div>").text(temp + "℃");
+        var todayTemp = $("<div>").text(temp + "℃").addClass("temp");
         var todayWind = $("<div>").text("Wind Speed: " + wind + "kmph");
         var todayHumidity = $("<div>").text("Humidity: " + humidity + "%");
+        var todayInfo = $("<div>").append(placeName, todayTemp, todayWind, todayHumidity);
         current.text("Today");
-        var todayBlock = $("<div>").append(weatherIcon, todayTemp, todayWind, todayHumidity).addClass("today-block");
+        var todayBlock = $("<div>").append(weatherIcon, todayInfo).addClass("today-block");
         current.append(todayBlock);
 
     } else {
+        forecast.text("5 Day Forecast");
+        var forecastInfo = $("<div>").addClass("row d-flex");
         // Loop through results
         for (var i = 5; i < 40; i += 8) {
             var icon = results.list[i].weather[0].icon;
@@ -74,12 +80,15 @@ function renderResults(today, results) {
             var humidity = results.list[i].main.humidity;
             
             var weatherIcon = $("<img>").attr("src", iconURL);
-            var forecastDate = $("<div>").text(date);
-            var forecastTemp = $("<div>").text(temp + "℃");
+            var forecastDate = $("<div>").text(date).addClass("date");
+            var forecastTemp = $("<div>").text(temp + "℃").addClass("temp");
             var forecastWind = $("<div>").text("Wind Speed: " + wind + "kmph");
             var forecastHumidity = $("<div>").text("Humidity: " + humidity + "%");
-            var forecastBlock = $("<div>").append(weatherIcon, forecastDate, forecastTemp, forecastWind, forecastHumidity).addClass("forecast-block");
-            forecast.append(forecastBlock);
+            
+            var forecastBlock = $("<div>").append(weatherIcon, forecastDate, forecastTemp, forecastWind, forecastHumidity).addClass("forecast-block col-lg-2 col-md-6");
+            
+            forecastInfo.append(forecastBlock);
+            forecast.append(forecastInfo);
     }
     }
 
