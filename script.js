@@ -5,14 +5,27 @@ var history = $("#history");
 var current = $("#today");
 var forecast = $("#forecast");
 
+var searchHistory = [];
+
 // Save search results to local storage
-function searchSave(location) {}
+function searchSave(location) {
+  // Add current search to array
+  var currentSearch = location;
+  searchHistory.push(currentSearch);
+
+  localStorage.setItem("history", JSON.stringify(searchHistory));
+  currentSearch = "";
+
+}
 
 // Render results on page
 function renderResults(today, results) {
+     // Empty content sections
+    current.empty();
+    forecast.empty();
+
     // Render today's result
     if (today) {
-        console.log(results)
         var icon = results.weather[0].icon;
         var iconURL = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
         var temp = results.main.temp;
@@ -44,8 +57,6 @@ function renderResults(today, results) {
             forecast.append(weatherIcon, forecastDate, forecastTemp, forecastWind, forecastHumidity);
     }
     }
-    
-
 
 }
 
@@ -53,7 +64,9 @@ function renderResults(today, results) {
 sumbit.on("click", function (event) {
   event.preventDefault();
   var location = inputLocation.val().trim();
+
   // Save to local storage
+  searchSave(location);
 
   // Fetch request for today forecast
   var queryURLToday =
@@ -89,7 +102,3 @@ sumbit.on("click", function (event) {
 
   // Render search history
 });
-
-// Take user input into query URL
-// Make get request
-// Parse results
