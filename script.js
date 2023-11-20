@@ -31,7 +31,7 @@ function renderHistory() {
   
   // Loop through history array
     for (var i = 0; i < previousSearch.length; i++) {
-      var historyBtn = $("<button>").text(previousSearch[i]);
+      var historyBtn = $("<button>").text(previousSearch[i]).attr("location-name", previousSearch[i]);
       locationHistory.append(historyBtn);
     }
 
@@ -80,16 +80,8 @@ function renderResults(today, results) {
 
 }
 
-// Create event handler for location submission
-sumbit.on("click", function (event) {
-  event.preventDefault();
-  var location = inputLocation.val().trim();
-  // Render search history
-  renderHistory();
-
-  // Save to local storage
-  searchSave(location);
-
+// Return forecast
+function forecastInfo(location) {
   // Fetch request for today forecast
   var queryURLToday =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -121,8 +113,30 @@ sumbit.on("click", function (event) {
       var today = false;
       renderResults(today, data);
     });
+}
+
+// Create event handler for location submission
+sumbit.on("click", function (event) {
+  event.preventDefault();
+  var location = inputLocation.val().trim();
+  // Render search history
+  renderHistory();
+
+  // Save to local storage
+  searchSave(location);
+
+  // Fetch and render
+  forecastInfo(location);
 
 });
+
+// Event handler for history buttons
+locationHistory.on("click", "button", function() {
+  var pastLocation = $(this).attr("location-name")
+  
+  // Make new get requests
+  forecastInfo(pastLocation);
+})
 
 // Render search history
 renderHistory();
